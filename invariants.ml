@@ -31,9 +31,17 @@ let x n = "x" ^ string_of_int n
    (Var 1, Const 3)) retourne "(+ x1 3)" et str_of_test (Equals (Var
    2, Const 2)) retourne "(= x2 2)". *)
 
-let rec str_of_term t = "TODO" (* À compléter *)
-
-let str_of_test t = "TODO" (* À compléter *)
+let rec str_of_term t = 
+  match t with 
+  | Const x  -> string_of_int x
+  | Var x -> "x" ^ string_of_int x
+  | Add (x,y) -> " (+ " ^ str_of_term(x) ^ " " ^ str_of_term(y) ^ ")"
+   Mult (x, y) -> " (* " ^ str_of_term(x) ^ " " ^str_of_term(y) ^ ")"
+  
+let str_of_test t = 
+  match t with 
+  | Equals (x,y) -> "( = " ^ str_of_term x ^ " " ^ str_of_term y ^ ")"
+  | GreaterThan (x,y) -> "( > " ^ str_of_term x ^ " " ^ str_of_term y ^ ")"
 
 let string_repeat s n =
   Array.fold_left (^) "" (Array.make n s)
@@ -57,7 +65,14 @@ let str_condition l = "TODO" (* À compléter *)
 
 let str_assert s = "(assert " ^ s ^ ")"
 
-let str_assert_forall n s = "TODO" (* À compléter *)
+let str_assert_forall n s = 
+  let ret = "(assert (forall ("
+  in
+  let rec loop i = 
+    if i < n 
+      then "(x" ^ (string_of_int i) ^ " Int) " ^ loop (i+1)
+    else "(x" ^ (string_of_int i) ^ " Int)";
+  in ret ^ loop (1) ^ ") " ^ "(" ^ s ^ ")))"
 
 (* Question 4. Nous donnons ci-dessous une définition possible de la
    fonction smt_lib_of_wa. Complétez-la en écrivant les définitions de
