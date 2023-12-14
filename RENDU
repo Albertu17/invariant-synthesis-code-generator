@@ -8,10 +8,9 @@ Date limite: 15 décembre 2023 à 22:00
 
 Identité
 --------
-Nombre de binôme: **à remplir**
-Nom, prénom 1: **à remplir**
-Nom, prénom 2: **à remplir**
-
+Nombre de binôme: 16
+Nom, prénom 1: DE LARMINAT, Foucauld
+Nom, prénom 2: TOMASI, Albert
 
 Questions sur votre code
 ------------------------
@@ -31,8 +30,19 @@ Questions sur votre code
    quantité strictement décroissante au cours des appels successifs
    vous assure la terminaison ?
 
-**à remplir**
+Fonction récursive avec pattern matching pour pouvoir faire un appel sur 
+tous les termes. 
+ 
+Cas de base (pour str_of_term) : Const of Int | Var of Int, les deux 
+produisent des strings avec leurs valeures respectives et ne font pas 
+appel à str_of_term ensuite. 
 
+A chaque appel de la fonction, la longeur du terme passé en paramètre 
+diminue (de 1 si match avec Const | Var, de 2 si match avec Add | Mult).
+ Ainsi il n'y aura jamais plus de n appels à str_of_term
+(avec n étant le nombres de termes founis). str_of_test fonction de la 
+manière similaire au pattern 
+matching de Add | Mult.
 ---
 
 2. Pour l'implémentation de `str_condition`, quelles sont les
@@ -54,7 +64,10 @@ Questions sur votre code
    auxiliaires sont utilisées dans votre implémentation de la fonction
    `str_assert_forall`.
 
-**à remplir**
+Fonctions auxilliaires : 
+
+- string_of_int : necessaire pour pouvoir créer les valeurs x1, x2 ... xn en fonction de n. 
+- rec loop i : loop n fois de telle sorte à créer n valeurs x1, x2 ... xn. 
 
 ---
 
