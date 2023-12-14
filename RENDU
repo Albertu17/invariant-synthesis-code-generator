@@ -8,9 +8,9 @@ Date limite: 15 décembre 2023 à 22:00
 
 Identité
 --------
-Nombre de binôme: **à remplir**
-Nom, prénom 1: **à remplir**
-Nom, prénom 2: **à remplir**
+Nombre de binôme: 16
+Nom, prénom 1: De Larminat, Foucauld
+Nom, prénom 2: Tomasi, Albert
 
 
 Questions sur votre code
@@ -31,7 +31,17 @@ Questions sur votre code
    quantité strictement décroissante au cours des appels successifs
    vous assure la terminaison ?
 
-**à remplir**
+Fonction récursive avec pattern matching pour déconstruire ce type
+récursif. 
+ 
+Cas de base (pour str_of_term) : Const of Int | Var of Int. Pour ces deux
+cas, on renvoie directement une chaîne de caractères sans faire de nouvel
+appel à str_of_term. 
+Pour les autres cas, à chaque appel de la fonction, la longeur du terme
+passé en paramètre diminue (de 1 si match avec Const | Var, de 2 si match
+avec Add | Mult). Ainsi il n'y aura jamais plus de n appels à str_of_term
+(avec n étant le nombre de termes founis).
+
 
 ---
 
@@ -44,7 +54,12 @@ Questions sur votre code
    comment ces fonctions auxiliaires sont utilisées dans votre
    implémentation de la fonction `str_condition`.
 
-**à remplir**
+Pour l'implémentation de str_condition, nous avons utilisé les fonctions
+auxiliaires suivantes:
+. List.map, pour appliquer la fonction string_of_term aux éléments de la
+liste de termes passée en argument.
+. String.concat, pour concaténer ensuite les chaînes de caractères obtenues,
+en insérant un espace entre chacune d'elles.
 
 ---
 
@@ -54,7 +69,14 @@ Questions sur votre code
    auxiliaires sont utilisées dans votre implémentation de la fonction
    `str_assert_forall`.
 
-**à remplir**
+Pour l'implémentation de str_assert_forall, nous avons utilisé les fonctions
+auxiliaires suivantes:
+. x (fournie), pour obtenir la chaîne de caractères "xi" à partir de l'entier i.
+. rec loop, pour exécuter l'opération précédente pour tous les entiers de 1 à n
+(entier passé en argument), opérer le bon formatage et concaténer tous les résultas
+entre eux.
+. str_assert (fournie), pour faire précéder la chaîne de caractères finale
+de la mention "assert".
 
 ---
 
@@ -71,7 +93,8 @@ Questions sur votre code
    construire un programme SMT-LIB plus proche de la façon dont les
    variables sont mises à jour en Java.
 
-**à remplir**
+La mise à jour précédente nécessite en Java l'utilisation d'une variable tampon
+qui stocke la valeur de la première variable avant sa modification.
 
 ---
 

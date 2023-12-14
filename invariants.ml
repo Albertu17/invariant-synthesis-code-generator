@@ -31,10 +31,18 @@ let x n = "x" ^ string_of_int n
    (Var 1, Const 3)) retourne "(+ x1 3)" et str_of_test (Equals (Var
    2, Const 2)) retourne "(= x2 2)". *)
 
-let rec str_of_term t = "TODO" (* À compléter *)
-
-let str_of_test t = "TODO" (* À compléter *)
-
+let rec str_of_term t = 
+  match t with 
+  | Const x  -> string_of_int x
+  | Var x -> "x" ^ string_of_int x
+  | Add (x,y) -> "(+ " ^ str_of_term x ^ " " ^ str_of_term y ^ ")"
+  | Mult (x,y) -> "(* " ^ str_of_term x ^ " " ^ str_of_term y ^ ")"
+  
+let str_of_test t = 
+  match t with 
+  | Equals (x,y) -> "(= " ^ str_of_term x ^ " " ^ str_of_term y ^ ")"
+  | GreaterThan (x,y) -> "(> " ^ str_of_term x ^ " " ^ str_of_term y ^ ")"
+  
 let string_repeat s n =
   Array.fold_left (^) "" (Array.make n s)
 
@@ -44,7 +52,8 @@ let string_repeat s n =
    l'invariant.  Par exemple, str_condition [Var 1; Const 10] retourne
    "(Invar x1 10)". *)
 
-let str_condition l = "TODO" (* À compléter *)
+let str_condition l =
+  "(Invar " ^ String.concat " " (List.map str_of_term l) ^ ")"
 
 (* Question 3. Écrire une fonction
    `str_assert_for_all : int -> string -> string` qui prend en
@@ -57,7 +66,16 @@ let str_condition l = "TODO" (* À compléter *)
 
 let str_assert s = "(assert " ^ s ^ ")"
 
-let str_assert_forall n s = "TODO" (* À compléter *)
+let str_assert_forall n s =
+  (* répète l'opération de formatage des chaînes de caractères correspondant
+    aux variables pour tous les entiers de 1 à n, en concaténant les résultats
+    obtenus au fur et à mesure. *)
+  let rec loop i = 
+    if i < n 
+      then "(" ^ x i ^ " Int) " ^ loop (i+1)
+    else "(" ^ x i ^ " Int)";
+  in str_assert ("(forall (" ^ loop (1) ^ ") " ^ "(" ^ s ^ "))")
+
 
 (* Question 4. Nous donnons ci-dessous une définition possible de la
    fonction smt_lib_of_wa. Complétez-la en écrivant les définitions de
@@ -70,13 +88,29 @@ let smtlib_of_wa p =
     ^ "(declare-fun Invar (" ^ string_repeat "Int " p.nvars ^  ") Bool)" in
   let loop_condition =
     "; la relation Invar est un invariant de boucle\n"
-    ^ "TODO" (* À compléter *) in
+    ^ str_assert_forall p.nvars
+      ("=> " (* Signification de la formule construite: Si *)
+        ^ "(and "
+          (* un ensemble de termes (i.e. un état du programme) est dans l'invariant (zone safe) *)
+          ^ str_condition (List.init p.nvars (fun i -> Var(i+1))) ^ " "
+          (* et que la boucle peut encore itérer (condition de boucle vraie) *)
+          ^ str_of_test p.loopcond ^ ") "
+        (* alors cet ensemble est toujours dans l'invariant après une itération de la boucle. *)
+        ^ str_condition p.mods) in
   let initial_condition =
     "; la relation Invar est vraie initialement\n"
     ^ str_assert (str_condition (List.map (function i -> Const i) p.inits)) in
   let assertion_condition =
     "; l'assertion finale est vérifiée\n"
-    ^ "TODO" (* À compléter *) in
+    ^ str_assert_forall p.nvars
+      ("=> " (* Signification de la formule construite: Si *)
+        ^ "(and "
+          (* un ensemble de termes est dans l'invariant *)
+          ^ str_condition (List.init p.nvars (fun i -> Var(i+1)))
+          (* et que la boucle est terminée (condition de boucle fausse) *)
+          ^ " (not" ^ str_of_test p.loopcond ^ ")) "
+        (* alors l'assertion finale est respectée (i.e. le programme n'est pas dans la zone erreur). *)
+        ^ str_of_test p.assertion) in
   let call_solver =
     "; appel au solveur\n(check-sat-using (then qe smt))\n(get-model)\n(exit)\n" in
   String.concat "\n" [declare_invariant;
@@ -103,4 +137,4 @@ let () = Printf.printf "%s" (smtlib_of_wa p1)
 
 let p2 = None (* À compléter *)
 
-let () = Printf.printf "%s" (smtlib_of_wa p2)
+(* let () = Printf.printf "%s" (smtlib_of_wa p2) *)
