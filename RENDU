@@ -94,10 +94,14 @@ de la mention "assert".
    variables sont mises à jour en Java.
 
 La mise à jour précédente nécessite en Java l'utilisation d'une variable tampon
-qui stocke la valeur de la première variable avant sa modification.
+qui stocke la valeur de la première variable avant sa modification comme suivant : 
+
+temp = x1 + 1;
+x2 = x1 + 1;
+x2 = temp;
 
 ---
 
 5. Avez-vous d'autres remarques sur votre rendu ? (question optionnelle)
 
-**à remplir**
+
