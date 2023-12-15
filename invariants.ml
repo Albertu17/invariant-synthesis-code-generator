@@ -135,6 +135,10 @@ let () = Printf.printf "%s" (smtlib_of_wa p1)
    test avec **trois** variables et vérifiez qu'il donne un fichier
    SMT-LIB la forme attendue. *)
 
-let p2 = None (* À compléter *)
+let p2 = {nvars = 3;
+          inits = [0 ; 1; 10];
+          mods = [Add ((Var 1), (Const (2))); Add ((Var 2), (Const (2))); Add ((Var 3), (Const (-1)))];
+          loopcond = GreaterThan ((Var 3), (Const 0));
+          assertion = GreaterThan (Mult((Var 1), (Var 2)),(Const 400))}
 
-(* let () = Printf.printf "%s" (smtlib_of_wa p2) *)
+let () = Printf.printf "%s" (smtlib_of_wa p2)

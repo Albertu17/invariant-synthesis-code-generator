@@ -22,7 +22,7 @@ Questions sur votre code
    warnings, puis que `./invariants` produit une sortie au format
    SMT-LIB, et enfin que cette sortie est acceptée par Z3 ?
 
-**à remplir**
+Oui, nous avons testé tout cela avec succès.
 
 ---
 
@@ -31,16 +31,18 @@ Questions sur votre code
    quantité strictement décroissante au cours des appels successifs
    vous assure la terminaison ?
 
-Fonction récursive avec pattern matching pour déconstruire ce type
-récursif. 
- 
-Cas de base (pour str_of_term) : Const of Int | Var of Int. Pour ces deux
-cas, on renvoie directement une chaîne de caractères sans faire de nouvel
-appel à str_of_term. 
-Pour les autres cas, à chaque appel de la fonction, la longeur du terme
-passé en paramètre diminue (de 1 si match avec Const | Var, de 2 si match
-avec Add | Mult). Ainsi il n'y aura jamais plus de n appels à str_of_term
-(avec n étant le nombre de termes founis).
+Pour déconstruire le type term, il est naturel d'utiliser une fonction
+récursive avec pattern matching. La fonction string_of_term en est un exemple.
+
+Cas de base: Const of Int | Var of Int.
+Pour ces deux cas, on renvoie directement un résultat (une chaîne de
+caractères dans le cas de string_of_term) sans faire d'appel récursif.
+
+Autres cas: Add of term * term | Mult of term * term
+On fait dans ces cas deux appels récursifs, avec des sous-arbres (sous-termes)
+de hauteur inférieure de 1 par rapport à la hauteur de l'abre traité.
+On est donc assurés que la fonction terminera après au maximum 2^n appels
+récursifs, avec n la hauteur de l'abre correspondant au terme passé en argument.
 
 
 ---
@@ -93,15 +95,18 @@ de la mention "assert".
    construire un programme SMT-LIB plus proche de la façon dont les
    variables sont mises à jour en Java.
 
-La mise à jour précédente nécessite en Java l'utilisation d'une variable tampon
-qui stocke la valeur de la première variable avant sa modification comme suivant : 
-
-temp = x1 + 1;
-x1 = x2 + 1;
-x2 = temp;
+Soient x1 et x2 deux termes tels que l'expression de x2 dépende de x1.
+Une manière d'adapter le langage WA aux mises à jour séquentielles est
+de remplacer dans l'expression de x2 les mentions x1 par le terme correspondant
+à sa modification lors d'une itération.
+Par exemple, pour le programme p1, la formule exprimant que Invar est un 
+invariant de boucle ne serait plus
+(assert (forall ((x1 Int) (x2 Int)) (=> (and (Invar x1 x2) (> x1 0)) (Invar (+ x1 -1) (+ x2 x1)))))
+mais serait
+(assert (forall ((x1 Int) (x2 Int)) (=> (and (Invar x1 x2) (> x1 0)) (Invar (+ x1 -1) (+ x2 (+ x1 -1)))))).
 
 ---
 
 5. Avez-vous d'autres remarques sur votre rendu ? (question optionnelle)
 
-
+**à remplir**
