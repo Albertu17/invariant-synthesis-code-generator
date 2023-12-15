@@ -97,7 +97,7 @@ La mise à jour précédente nécessite en Java l'utilisation d'une variable tam
 qui stocke la valeur de la première variable avant sa modification comme suivant : 
 
 temp = x1 + 1;
-x2 = x1 + 1;
+x1 = x2 + 1;
 x2 = temp;
 
 ---
